@@ -32,7 +32,7 @@ function Nav() {
   return (
     <div className="w-full h-[80px] bg-white fixed top-0 shadow-lg flex sm:justify-between justify-between items-center px-[10px] z-[80]">
         <div className="flex justify-center items-center gap-[10px] ml-[40px] z-[80]">
-            <div onClick={() => setActiveSearch(false)} className='cursor-pointer'>
+            <div onClick={() => {setActiveSearch(false); navigate('/')}} className='cursor-pointer'>
                 <img src={logo2} alt="Logo" className='w-[50px]'/>
             </div>
 
@@ -50,14 +50,14 @@ function Nav() {
                 <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute md:right-[80px] right-[40px] top-[85px] rounded-lg flex flex-col items-center gap-[20px] p-[20px]'>
 
                 <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer'>
-                    <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden'/>
+                    <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden' onClick={()=>navigate('/profile')}/>
                 </div>
-                <div className="font-semibold text-gray-700 text-[19px]">
+                <div className="font-semibold text-gray-700 text-[19px] cursor-pointer" onClick={()=>navigate('/profile')}>
                     {`${userData.firstName} ${userData.lastName}`}
                 </div>
-                <button className='w-[100%] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500'>View Profile</button>
+                <button className='w-[100%] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500' onClick={()=>navigate('/profile')}>View Profile</button>
                 <div className="h-[2px] w-full bg-gray-300"></div>
-                <div className='flex justify-start items-center text-gray-600 cursor-pointer w-full gap-[15px]'>
+                <div className='flex justify-start items-center text-gray-600 cursor-pointer w-full gap-[15px]' onClick={()=> navigate('/network')}>
                     <FaUserGroup className='w-[24px] h-[24px] text-gray-600'/>
                     <div>My Network</div>
                 </div>
@@ -71,7 +71,7 @@ function Nav() {
                 <TiHome className='w-[24px] h-[24px] text-gray-600'/>
                 <div>Home</div>
             </div>
-            <div className='lg:flex flex-col justify-center items-center text-gray-600 cursor-pointer hidden'>
+            <div className='lg:flex flex-col justify-center items-center text-gray-600 cursor-pointer hidden' onClick={()=> navigate('/network')}>
                 <FaUserGroup className='w-[24px] h-[24px] text-gray-600'/>
                 <div>My Network</div>
             </div>

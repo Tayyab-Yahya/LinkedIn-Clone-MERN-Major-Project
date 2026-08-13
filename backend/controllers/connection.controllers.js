@@ -12,7 +12,7 @@ export const sendConnection = async (req, res) => {
             return res.status(400).json({message: "You cannot send connection request to yourself!"})
         }
 
-        if(user.useConnection.includes(id)){
+        if(user.connection && user.connection.includes(id)){
             return res.status(400).json({message: "You're already connected!"})
         }
 
@@ -211,7 +211,7 @@ export const getUserConnections = async (req, res) => {
 
         const user = await User.findById(userId).populate("connection", "firstName lastName userName profileImage headline connection")
 
-        return res.status.json(user.connection)
+        return res.status(200).json(user? user.connection : [])
 
     } catch (error) {
         console.error("Error in getUserConnections controller: ", error)

@@ -62,7 +62,7 @@ function Home() {
           {/* Cover Photo */}
           <div className='w-full h-[100px] bg-gray-400 rounded overflow-hidden flex justify-center items-center cursor-pointer' onClick={() => setEdit(true)}>
             <img src={userData.coverImage || ""} alt="" className='w-full'/>
-            <FiCamera className='absolute top-[20px] right-[20px] text-gray-800'/>
+            <FiCamera className='absolute top-[20px] right-[20px] text-white'/>
           </div>
           
           {/* Profile Picture */}
