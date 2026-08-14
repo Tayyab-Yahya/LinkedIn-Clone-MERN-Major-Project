@@ -7,12 +7,14 @@ import {HiPencil} from "react-icons/hi2";
 import EditProfile from '../components/EditProfile.jsx';
 import axios from "axios"
 import { authDataContext } from '../context/AuthContext.jsx';
+import Post from '../components/Post.jsx'
 
 
 function Profile() {
 
     let {userData, setUserData, edit, setEdit, postData, setPostData} = useContext(userDataContext)
     let [userConnections, setUserConnections] = useState([])
+    let [profilePost, setProfilePost] = useState([])
     let { serverUrl } = useContext(authDataContext)
 
     const handleGetUserConnections = async () => {
@@ -28,11 +30,15 @@ function Profile() {
         handleGetUserConnections()
     }, [])
 
+    useEffect(()=>{
+        setProfilePost(postData.filter((post)=>post.author._id==userData._id));
+    }, [])
+
   return (
-    <div className='w-full min-h-[100vh] bg-[#f0efe7] flex flex-col items-center pt-[100px]'>
+    <div className='w-full min-h-[100vh] bg-[#f0efe7] flex flex-col items-center pt-[100px] pb-[40px]'>
       <Nav />
       {edit && <EditProfile/>}
-      <div className='w-full max-w-[900px] min-h-[100vh]'>
+      <div className='w-full max-w-[900px] min-h-[100vh] flex flex-col gap-[10px] '>
             <div className='relative pb-[40px] bg-white rounded-lg shadow-lg'>
                 {/* Cover Photo */}
                 <div className='w-full h-[150px] bg-gray-400 rounded overflow-hidden flex justify-center items-center cursor-pointer' onClick={() => setEdit(true)}>
@@ -60,6 +66,27 @@ function Profile() {
                 
                 <button className='ml-[12px] min-w-[150px] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500 my-[20px] flex items-center justify-center gap-[10px]' onClick={() => setEdit(true)}>Edit Profile <HiPencil/></button>
             </div>
+
+            <div className='w-full min-h-[100px] flex items-center p-[20px] text-[22px] text-gray-600 font-semibold bg-white shadow-lg rounded-lg'>
+                {`Posts (${profilePost.length})`}
+            </div>
+
+            {profilePost.map((post, index)=>(
+                <Post key={index} id={post._id} description={post.description} author={post.author} image={post.image} like={post.like} comment={post.comment} createdAt={post.createdAt}/>
+            ))}
+
+            {userData.skills.length>0 && <div  className='w-full min-h-[100px] flex flex-col gap-[10px] jusify-center p-[20px] bg-white shadow-lg rounded-lg'>
+                <div className='text-[22px] text-gray-600 font-semibold'>
+                    {`Skills (${userData.skills.length})`}
+                </div>
+                <div className='flex flex-wrap justify-start items-center gap-[10px] text-[17px] text-gray-600 font-semibold p-[20px]'>
+                    {userData.skills.map((skill)=>(
+                        <div>{skill}</div>
+                    ))}
+                    <button className="w-[12%] h-[37px] bg-blue-500 text-white py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500" onClick={()=>setEdit(true)}>Add skill</button>
+                </div>
+            </div>}
+
         </div>
     </div>
   )
