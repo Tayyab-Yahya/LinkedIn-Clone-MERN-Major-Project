@@ -2,6 +2,7 @@ import React, {createContext, useContext, useState, useEffect} from 'react'
 export const userDataContext = createContext();
 import {authDataContext} from './AuthContext.jsx';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function UserContext({children}) {
 
@@ -9,6 +10,9 @@ function UserContext({children}) {
     let {serverUrl} = useContext(authDataContext);
     let [edit, setEdit] = useState(false);
     let [postData, setPostData] = useState([]);
+    let [profileData, setProfileData] = useState([]);
+
+    const navigate = useNavigate();
 
     const getCurrentUser = async () => {
         try {
@@ -31,12 +35,22 @@ function UserContext({children}) {
         }
     }
 
+    const handleGetProfile = async (userName) => {
+        try {
+            let result = await axios.get(serverUrl+`/api/user/profile/${userName}`, {withCredentials: true});
+            setProfileData(result.data);
+            navigate(`/profile`);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         getCurrentUser();
         getPost();
     }, []);
 
-    const value = {userData, setUserData, edit, setEdit, postData, setPostData, getPost};
+    const value = {userData, setUserData, edit, setEdit, postData, setPostData, getPost, profileData, setProfileData, handleGetProfile};
 
   return (
     <div>

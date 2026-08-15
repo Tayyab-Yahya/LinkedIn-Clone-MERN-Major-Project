@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import logo2 from "../assets/logo2.png"
 import { IoSearchSharp } from "react-icons/io5";
 import { TiHome } from "react-icons/ti";
@@ -14,7 +14,10 @@ function Nav() {
 
     let [activeSearch, setActiveSearch] = useState(false)
     let [showPopup, setShowPopup] = useState(false)
-    let {userData, setUserData} = useContext(userDataContext)
+    let [searchInput, setSearchInput] = useState("")
+    let [searchData, setSearchData] = useState([])
+
+    let {userData, setUserData, handleGetProfile} = useContext(userDataContext)
     let {serverUrl} = useContext(authDataContext)
     let navigate = useNavigate()
 
@@ -29,6 +32,23 @@ function Nav() {
         }
     }
 
+    const handleSearch = async () => {
+        try {
+            let result = await axios.get(`${serverUrl}/api/user/search?query=${searchInput}`, {withCredentials: true})
+            console.log(result.data)
+            setSearchData(result.data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(()=>{
+        if(searchInput){
+            handleSearch()
+        }
+    }, [searchInput])
+
   return (
     <div className="w-full h-[80px] bg-white fixed top-0 shadow-lg flex sm:justify-between justify-between items-center px-[10px] z-[80]">
         <div className="flex justify-center items-center gap-[10px] ml-[40px] z-[80]">
@@ -38,10 +58,23 @@ function Nav() {
 
             {!activeSearch && <div><IoSearchSharp className='w-[23px] h-[23px] text-gray-600 md:hidden' onClick={() => setActiveSearch(true)}/></div>}
 
+            <div className='absolute shadow-lg top-[100px] left-[0px] lg:left-[20px] w-[100%] md:w-[500px] lg:w-[700px] bg-white min-h-[100px] flex flex-col gap-[20px]'>
+                {searchData.map((data)=>(
+                    <div className='flex items-center gap-[20px]'>
+                        <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer'>
+                            <img src={data.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden' onClick={()=>handleGetProfile(data.userName)}/>
+                        </div>
+                        <div className="font-semibold text-gray-700 text-[19px] cursor-pointer" onClick={()=>handleGetProfile(data.userName)}>
+                            {`${data.firstName} ${data.lastName}`}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             <form className={`w-[200px] lg:w-[350px] h-[40px] bg-[#f0efe7] items-center gap-[10px] px-[10px] py-[5px] rounded-full border-gray-500 border md:flex ${!activeSearch? "hidden": "flex"} `}>
 
                 <div><IoSearchSharp className='w-[23px] h-[23px] text-gray-600'/></div>
-                <input type="text" placeholder='Search' className='bg-transparent outline-none w-[80%] border-0'/>
+                <input type="text" placeholder='Search' value={searchInput} className='bg-transparent outline-none w-[80%] border-0' onChange={(e)=>setSearchInput(e.target.value)}/>
             </form>
         </div>
         <div className="flex justify-center items-center gap-[20px] mr-[40px]">
@@ -50,9 +83,9 @@ function Nav() {
                 <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute md:right-[80px] right-[40px] top-[85px] rounded-lg flex flex-col items-center gap-[20px] p-[20px]'>
 
                 <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer'>
-                    <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden' onClick={()=>navigate('/profile')}/>
+                    <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden' onClick={()=>handleGetProfile(userData.userName)}/>
                 </div>
-                <div className="font-semibold text-gray-700 text-[19px] cursor-pointer" onClick={()=>navigate('/profile')}>
+                <div className="font-semibold text-gray-700 text-[19px] cursor-pointer" onClick={()=>handleGetProfile(userData.userName)}>
                     {`${userData.firstName} ${userData.lastName}`}
                 </div>
                 <button className='w-[100%] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500' onClick={()=>navigate('/profile')}>View Profile</button>
