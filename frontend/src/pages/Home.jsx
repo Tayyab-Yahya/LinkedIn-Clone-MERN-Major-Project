@@ -1,4 +1,4 @@
-import React, {useContext, useState, useRef} from 'react'
+import React, {useContext, useState, useRef, useEffect} from 'react'
 import Nav from '../components/Nav.jsx'
 import Post from '../components/Post.jsx';
 import BlankProfile from "../assets/BlankProfile.png"
@@ -16,7 +16,7 @@ import axios from "axios"
 
 function Home() {
 
-  let {userData, setUserData, edit, setEdit, postData, setPostData} = useContext(userDataContext)
+  let {userData, setUserData, edit, setEdit, postData, setPostData, getPost, handleGetProfile} = useContext(userDataContext)
   let {serverUrl} = useContext(authDataContext)
 
   let [frontendImage, setFrontendImage] = useState("")
@@ -24,6 +24,7 @@ function Home() {
   let [description, setDescription] = useState("")
   let [uploadPost, setUploadPost] = useState(false)
   let [posting, setPosting] = useState(false)
+  let [suggestedUsers, setSuggestedUsers] = useState([])
 
   let image = useRef();
 
@@ -50,6 +51,24 @@ function Home() {
       console.log(e);
     }
   }
+
+  const handleSuggestedUsers = async () => {
+    try {
+      let result = await axios.get(`${serverUrl}/api/user/suggestedusers`, {withCredentials: true})
+      setSuggestedUsers(result.data)
+      console.log(result.data)
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(()=>{
+    handleSuggestedUsers()
+  }, [])
+
+  useEffect(()=>{
+    getPost()
+  }, [uploadPost])
 
   return (
     <div className="w-full min-h-[100vh] bg-[#f0efe7] pt-[100px] gap-[20px] flex justify-center items-center lg:items-start px-[50px] lg:flex-row flex-col relative pb-[50px]">
@@ -90,7 +109,7 @@ function Home() {
         { uploadPost && <div className="w-full h-full bg-black fixed top-0 z-[100] opacity-[0.6] left-0"></div>}
 
         {/* Create a post Popup */}       
-        { uploadPost && <div className="z-[200] bg-white shadow-lg rounded-lg fixed w-[90%] max-w-[500px] h-[600px] top-6 p-[20px] flex items-start justify-start flex-col gap-[20px]">
+        { uploadPost && <div className=" z-[200] bg-white shadow-lg rounded-lg fixed w-[90%] max-w-[500px] h-[500px] top-[60px] p-[20px] flex items-start justify-start flex-col gap-[20px]">
           <div
           className="absolute top-[15px] right-[15px] cursor-pointer"
           onClick={() => setUploadPost(false)}
@@ -163,8 +182,30 @@ function Home() {
 
         </div>
 
-        <div className='min-h-[200px] w-full lg:w-[25%] bg-white shadow-lg'>
+        {/* Suggested Users Section */}
+        <div className='min-h-[200px] w-full lg:w-[25%] bg-white shadow-lg hidden lg:flex flex-col gap-[20px] p-[10px]'>
+          {suggestedUsers.length>0 && <div className='flex flex-col gap-[10px]'>
+            <p className="text-gray-500 font-semibold">Suggested Users</p>
+            {suggestedUsers.map((user)=>(
+              <div className='flex flex-col gap-[10px] p-[5px]'>
+                <div className='flex items-center gap-[10px] p-[10px] hover:bg-gray-200 cursor-pointer overflow-hidden rounded-lg' key={user._id} onClick={()=>handleGetProfile(user.userName)}>
+                  <div className='flex flex-col justify-center items-center text-gray-600'>
+                      <img src={user.profileImage || BlankProfile} alt="Profile" className='w-[40px] h-[40px] rounded-full overflow-hidden'/>
+                  </div>
+                  <div>
+                      <div className="font-semibold text-gray-700 text-[17px]">
+                          {`${user.firstName} ${user.lastName}`}
+                      </div>
+                      <div className='text-[14px] text-gray-500 font-semibold'>{user.headline}</div>
+                  </div>
+                </div>
 
+              </div>
+            ))}
+          </div>}
+          {suggestedUsers.length==0 && <div>
+            <p className="text-gray-500 text-center font-semibold">No suggested users available.</p>
+          </div>}
         </div>
     </div>
   )

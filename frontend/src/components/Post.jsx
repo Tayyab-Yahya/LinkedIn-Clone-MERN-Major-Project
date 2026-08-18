@@ -5,7 +5,7 @@ import {BiLike} from "react-icons/bi"
 import { userDataContext } from '../context/UserContext'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
-import { io } from 'socket.io-client'
+import { socket } from '../context/UserContext'
 
 import { AiOutlineLike } from "react-icons/ai"; //NoFill
 import { AiFillLike } from "react-icons/ai"; //Fill
@@ -15,14 +15,12 @@ import { IoIosSend } from "react-icons/io"; //Share
 import { LuSendHorizontal } from "react-icons/lu"
 import ConnectionButton from './ConnectionButton'
 
-let socket = io("http://localhost:8000")
-
 function Post({id, author, like, comment, description, image, createdAt}) {
 
     let [more, setMore] = useState(false)
-    let [likes, setLikes] = useState(like || [])
+    let [likes, setLikes] = useState([])
     let [commentContent, setCommentContent] = useState("")
-    let [comments, setComments] = useState(comment || [])
+    let [comments, setComments] = useState([])
     let [showComment, setShowComment] = useState(false)
 
     let {userData, setUserData, getPost, handleGetProfile} = useContext(userDataContext)
@@ -74,9 +72,10 @@ function Post({id, author, like, comment, description, image, createdAt}) {
 
     }, [id]);
 
-    useEffect(() => {
-        getPost();
-    }, [likes, setLikes, comments])
+    useEffect(()=>{
+        setLikes(like)
+        setComments(comment)
+    },[like, comment])
 
   return (
     <div className="w-full min-h-[200px] bg-white shadow-lg gap-[10px] rounded-lg p-[20px] flex flex-col">

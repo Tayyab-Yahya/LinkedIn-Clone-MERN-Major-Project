@@ -35,18 +35,15 @@ function Nav() {
     const handleSearch = async () => {
         try {
             let result = await axios.get(`${serverUrl}/api/user/search?query=${searchInput}`, {withCredentials: true})
-            console.log(result.data)
             setSearchData(result.data)
 
         } catch (error) {
-            console.log(error)
+            setSearchData([])
         }
     }
 
     useEffect(()=>{
-        if(searchInput){
-            handleSearch()
-        }
+            handleSearch()        
     }, [searchInput])
 
   return (
@@ -58,18 +55,21 @@ function Nav() {
 
             {!activeSearch && <div><IoSearchSharp className='w-[23px] h-[23px] text-gray-600 md:hidden' onClick={() => setActiveSearch(true)}/></div>}
 
-            <div className='absolute shadow-lg top-[100px] left-[0px] lg:left-[20px] w-[100%] md:w-[500px] lg:w-[700px] bg-white min-h-[100px] flex flex-col gap-[20px]'>
+            {searchData.length>0 && <div className='absolute shadow-lg top-[100px] left-[0px] lg:left-[20px] w-[100%] md:w-[400px] lg:w-[600px] bg-white min-h-[100px] flex flex-col gap-[20px] p-[20px] rounded-lg max-h-[400px] overflow-auto'>
                 {searchData.map((data)=>(
-                    <div className='flex items-center gap-[20px]'>
-                        <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer'>
-                            <img src={data.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden' onClick={()=>handleGetProfile(data.userName)}/>
+                    <div className='flex items-center gap-[20px] p-[10px] border-b-2 border-b-gray-300 hover:bg-gray-200 cursor-pointer rounded-lg' key={data._id} onClick={()=>handleGetProfile(data.userName)}>
+                        <div className='flex flex-col justify-center items-center text-gray-600'>
+                            <img src={data.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden'/>
                         </div>
-                        <div className="font-semibold text-gray-700 text-[19px] cursor-pointer" onClick={()=>handleGetProfile(data.userName)}>
-                            {`${data.firstName} ${data.lastName}`}
+                        <div>
+                            <div className="font-semibold text-gray-700 text-[19px]">
+                                {`${data.firstName} ${data.lastName}`}
+                            </div>
+                            <div className='text-[15px] text-gray-500 font-semibold'>{data.headline}</div>
                         </div>
                     </div>
                 ))}
-            </div>
+            </div>}
 
             <form className={`w-[200px] lg:w-[350px] h-[40px] bg-[#f0efe7] items-center gap-[10px] px-[10px] py-[5px] rounded-full border-gray-500 border md:flex ${!activeSearch? "hidden": "flex"} `}>
 
@@ -80,7 +80,7 @@ function Nav() {
         <div className="flex justify-center items-center gap-[20px] mr-[40px]">
 
             {showPopup &&
-                <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute md:right-[80px] right-[40px] top-[85px] rounded-lg flex flex-col items-center gap-[20px] p-[20px]'>
+                <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute md:right-[80px] right-[25px] top-[85px] rounded-lg flex flex-col items-center gap-[20px] p-[20px]'>
 
                 <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer'>
                     <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden' onClick={()=>handleGetProfile(userData.userName)}/>
@@ -108,7 +108,7 @@ function Nav() {
                 <FaUserGroup className='w-[24px] h-[24px] text-gray-600'/>
                 <div>My Network</div>
             </div>
-            <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer'>
+            <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer' onClick={()=>navigate("/notification")}>
                 <IoNotificationsSharp className='w-[24px] h-[24px] text-gray-600'/>
                 <div className='md:block hidden'>Notifications</div>
             </div>

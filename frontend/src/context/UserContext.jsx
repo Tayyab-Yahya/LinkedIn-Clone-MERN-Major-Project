@@ -3,6 +3,9 @@ export const userDataContext = createContext();
 import {authDataContext} from './AuthContext.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {io} from "socket.io-client"
+
+export let socket = io("http://localhost:8000")
 
 function UserContext({children}) {
 

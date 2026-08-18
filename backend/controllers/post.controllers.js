@@ -1,6 +1,7 @@
 import uploadOnCloudinary from "../config/cloudinary.js"
 import Post from "../models/post.model.js"
 import { io } from "../index.js"
+import Notification from "../models/notification.model.js";
 
 export const createPost = async (req, res) => {
     try {
@@ -48,6 +49,14 @@ export const like = async (req, res) => {
             post.like = post.like.filter((id)=>id!=userId)
         } else {
             post.like.push(userId)
+            if(post.author._id != userId){
+                let notification = await Notification.create({
+                    receiver: post.author,
+                    type: "like",
+                    relatedUser: userId,
+                    relatedPost: postId,
+                })
+            }
         }
 
         await post.save()
@@ -71,6 +80,14 @@ export const comment = async (req, res) => {
             $push:{comment:{content, user: userId}}
         }, {new: true})
         .populate("comment.user", "firstName lastName profileImage headline")
+
+        
+            let notification = await Notification.create({
+                receiver: post.author,
+                type: "comment",
+                relatedUser: userId,
+                relatedPost: postId,
+            })
 
         io.emit("commentAdded", {postId, comm: post.comment})
 

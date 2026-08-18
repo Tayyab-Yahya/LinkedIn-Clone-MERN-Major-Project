@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Network from './pages/Network'
 import Profile from './pages/Profile'
+import Notification from './pages/Notification.jsx'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
       <Route path="/login" element={userData? <Navigate to="/"/> : <Login/>}/>
       <Route path="/network" element={userData? <Network/> : <Navigate to="/login"/>}/>
       <Route path="/profile" element={userData? <Profile/> : <Navigate to="/login"/>}/>
+      <Route path="/notification" element={userData? <Notification/> : <Navigate to="/login"/>}/>
     </Routes>
   )
 }
