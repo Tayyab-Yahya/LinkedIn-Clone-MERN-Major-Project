@@ -53,6 +53,20 @@ function Post({id, author, like, comment, description, image, createdAt}) {
         }
     }
 
+    const handleDeletePost = async (id) => {
+        if(!id){
+            console.log("PostId is undefined.")
+            return
+        }
+        
+        try {
+            let result = await axios.delete(`${serverUrl}/api/post/delete/${id}`, {withCredentials:true})
+            console.log(result.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         
         socket.on("likeUpdated", (data) => {
@@ -90,19 +104,26 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                 <div className="font-semibold text-gray-800 text-[20px]">{`${author.firstName} ${author.lastName}`}</div>
                 <div className="font-medium text-gray-700 text-[15px]">{author.headline}</div>
                 <div className="font-normal text-gray-700 text-[13px]">{moment(createdAt).fromNow()}</div>
-
             </div>
         </div>
 
         {/* Button Div */}
         <div>
             {userData._id != author._id && <ConnectionButton userId={author._id} />}
+            {userData._id == author._id && 
+                <button className={`bg-red-600 hover:bg-red-700 min-w-[100px] h-[40px] text-white py-[5px] px-[10px] rounded-full border-2 border-red-700`} onClick={()=>handleDeletePost(id)}>
+                    delete
+                </button>
+            }
         </div>
       </div>
 
       {/* Lower Div */}
+      
       <div className={`w-full ${!more? "max-h-[100px] overflow-hidden" : ""} px-[10px]`}>{description}</div>
-      <div className='text-[15px] font-semibold pl-[10px] text-gray-800 cursor-pointer mt-[-13px]' onClick={()=>setMore(prev=>!prev)}>{!more? "Read more...":"Read less"}</div>
+
+      {description.length>200 && <div className='text-[15px] font-semibold pl-[10px] text-gray-800 cursor-pointer mt-[-13px]' onClick={()=>setMore(prev=>!prev)}>{!more? "Read more...":"Read less"}</div>}
+
         {image && <div className='w-full h-[300px] overflow-hidden flex justify-center rounded-lg'>
             <img src={image} alt="" className='h-full rounded-lg' />
         </div>}
@@ -147,15 +168,13 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                     {comments.map((com) => (
                         <div key={com._id} className='flex flex-col gap-[5px] border-b-2 border-b-gray-300 p-[20px]'>
                             <div className='flex justify-start items-center w-full gap-[10px]'>
-                                <div>
-                                    <div className='w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer'>
-                                        <img src={com.user.profileImage || BlankProfile} className='h-full w-full' />
-                                    </div>
-                                    <div>
-
-                                    </div>
+                                <div className='w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer' onClick={()=>handleGetProfile(com.user.userName)}>
+                                    <img src={com.user.profileImage || BlankProfile} className='h-full w-full' />
+                                </div>                                
+                                <div className='cursor-pointer' onClick={()=>handleGetProfile(com.user.userName)}>
+                                    <div className="font-semibold text-gray-800 text-[17px]">{`${com.user.firstName} ${com.user.lastName}`}</div>
+                                    <div className="text-gray-800 text-[13px]">{com.user.headline}</div>
                                 </div>
-                                <div className="font-semibold text-gray-800 text-[17px]">{`${com.user.firstName} ${com.user.lastName}`}</div>
                             </div>
                             <div>
                                 <div className='pl-[50px]'>{com.content}</div>

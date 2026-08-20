@@ -2,6 +2,7 @@ import uploadOnCloudinary from "../config/cloudinary.js"
 import Post from "../models/post.model.js"
 import { io } from "../index.js"
 import Notification from "../models/notification.model.js";
+import mongoose from "mongoose";
 
 export const createPost = async (req, res) => {
     try {
@@ -95,5 +96,21 @@ export const comment = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({message: `Comment Error: ${error}`})
+    }
+}
+
+export const deletePost = async (req, res) => {
+    try {
+        let {id} = req.params
+
+        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid or missing Post ID. Backend error" });
+        }
+
+        await Post.findByIdAndDelete(id)
+        return res.status(200).json({message: "Post deleted."})
+    } catch(error) {
+        console.log(error)
+        return res.status(500).json({message: `Delete Post error: ${error}`})
     }
 }

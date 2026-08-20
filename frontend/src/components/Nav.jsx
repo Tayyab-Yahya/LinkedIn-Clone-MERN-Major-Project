@@ -33,6 +33,11 @@ function Nav() {
     }
 
     const handleSearch = async () => {
+        
+        if (!searchInput.trim()) {
+            setSearchData([]);
+            return;
+        }
         try {
             let result = await axios.get(`${serverUrl}/api/user/search?query=${searchInput}`, {withCredentials: true})
             setSearchData(result.data)

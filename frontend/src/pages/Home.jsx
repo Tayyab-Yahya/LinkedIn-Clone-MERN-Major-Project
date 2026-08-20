@@ -56,7 +56,7 @@ function Home() {
     try {
       let result = await axios.get(`${serverUrl}/api/user/suggestedusers`, {withCredentials: true})
       setSuggestedUsers(result.data)
-      console.log(result.data)
+    
     } catch(e) {
       console.log(e)
     }
@@ -186,8 +186,8 @@ function Home() {
         <div className='min-h-[200px] w-full lg:w-[25%] bg-white shadow-lg hidden lg:flex flex-col gap-[20px] p-[10px]'>
           {suggestedUsers.length>0 && <div className='flex flex-col gap-[10px]'>
             <p className="text-gray-500 font-semibold">Suggested Users</p>
-            {suggestedUsers.map((user)=>(
-              <div className='flex flex-col gap-[10px] p-[5px]'>
+            {suggestedUsers.map((user, index)=>(
+              <div className='flex flex-col gap-[10px] p-[5px]' key={index}>
                 <div className='flex items-center gap-[10px] p-[10px] hover:bg-gray-200 cursor-pointer overflow-hidden rounded-lg' key={user._id} onClick={()=>handleGetProfile(user.userName)}>
                   <div className='flex flex-col justify-center items-center text-gray-600'>
                       <img src={user.profileImage || BlankProfile} alt="Profile" className='w-[40px] h-[40px] rounded-full overflow-hidden'/>
