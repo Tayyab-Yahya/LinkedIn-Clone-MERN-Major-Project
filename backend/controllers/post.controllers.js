@@ -88,7 +88,7 @@ export const comment = async (req, res) => {
                 type: "comment",
                 relatedUser: userId,
                 relatedPost: postId,
-            })
+            });
 
         io.emit("commentAdded", {postId, comm: post.comment})
 

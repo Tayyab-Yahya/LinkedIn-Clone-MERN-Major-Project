@@ -52,8 +52,8 @@ function Nav() {
     }, [searchInput])
 
   return (
-    <div className="w-full h-[80px] bg-white fixed top-0 shadow-lg flex sm:justify-between justify-between items-center px-[10px] z-[80]">
-        <div className="flex justify-center items-center gap-[10px] ml-[40px] z-[80]">
+    <div className="w-full h-[80px] bg-white fixed top-0 shadow-lg flex sm:justify-between justify-between items-center md:px-[10px] z-[80]">
+        <div className="flex justify-center items-center gap-[10px] ml-[10px] md:ml-[40px] z-[80]">
             <div onClick={() => {setActiveSearch(false); navigate('/')}} className='cursor-pointer'>
                 <img src={logo2} alt="Logo" className='w-[50px]'/>
             </div>
@@ -82,7 +82,7 @@ function Nav() {
                 <input type="text" placeholder='Search' value={searchInput} className='bg-transparent outline-none w-[80%] border-0' onChange={(e)=>setSearchInput(e.target.value)}/>
             </form>
         </div>
-        <div className="flex justify-center items-center gap-[20px] mr-[40px]">
+        <div className="flex justify-center items-center gap-[20px] mr-[10px] md:mr-[40px]">
 
             {showPopup &&
                 <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute md:right-[80px] right-[25px] top-[85px] rounded-lg flex flex-col items-center gap-[20px] p-[20px]'>

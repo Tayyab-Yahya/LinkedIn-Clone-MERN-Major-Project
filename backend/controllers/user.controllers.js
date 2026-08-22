@@ -1,5 +1,6 @@
 import User from '../models/user.model.js';
 import uploadOnCloudinary from "../config/cloudinary.js"
+import Notification from '../models/notification.model.js';
 
 export const getCurrentUser = async (req, res) => {
     try {
@@ -45,11 +46,21 @@ export const updateProfile = async (req, res) => {
 
 export const getProfile = async (req, res) => {
     try {
-        let {userName} = req.params;
+        let {userName} = req.params
+
         let user = await User.findOne({userName}).select("-password");
         if(!user){
             return res.status(404).json({message: "User not found."});
         }
+        
+        if(user._id != req.userId){
+            let notification = await Notification.create({
+                receiver: user,
+                type: "profileViewed",
+                relatedUser: req.userId,
+            });
+        }
+
         return res.status(200).json(user);
     } catch (error) {
         console.log(error);

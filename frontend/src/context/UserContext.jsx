@@ -41,7 +41,8 @@ function UserContext({children}) {
     const handleGetProfile = async (userName) => {
         try {
             let result = await axios.get(serverUrl+`/api/user/profile/${userName}`, {withCredentials: true});
-            setProfileData(result.data);
+            setProfileData(result.data)            
+
             navigate(`/profile`);
         } catch (error) {
             console.log(error);

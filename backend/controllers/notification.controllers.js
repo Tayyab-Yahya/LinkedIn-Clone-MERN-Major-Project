@@ -3,8 +3,9 @@ import Notification from "../models/notification.model.js"
 export const getNotifications = async (req, res) => {
     try {
         let notification = await Notification.find({receiver: req.userId})
-            .populate("relatedUser", "firstName lastName profileImage")
+            .populate("relatedUser", "firstName lastName profileImage userName")
             .populate("relatedPost", "image description")
+            .sort({createdAt: -1})
         return res.status(200).json(notification)
     } catch (error) {
         return res.status(500).json({message: "getNotification Error: ", error})

@@ -112,7 +112,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
             {userData._id != author._id && <ConnectionButton userId={author._id} />}
             {userData._id == author._id && 
                 <button className={`bg-red-600 hover:bg-red-700 min-w-[100px] h-[40px] text-white py-[5px] px-[10px] rounded-full border-2 border-red-700`} onClick={()=>handleDeletePost(id)}>
-                    delete
+                    delete post
                 </button>
             }
         </div>
