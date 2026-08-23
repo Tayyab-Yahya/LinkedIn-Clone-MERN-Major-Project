@@ -16,7 +16,7 @@ import axios from "axios"
 
 function Home() {
 
-  let {userData, setUserData, edit, setEdit, postData, setPostData, getPost, handleGetProfile} = useContext(userDataContext)
+  let {userData, setUserData, edit, setEdit, postData, setPostData, getPost, handleGetProfile, getCurrentUser} = useContext(userDataContext)
   let {serverUrl} = useContext(authDataContext)
 
   let [frontendImage, setFrontendImage] = useState("")
@@ -71,7 +71,7 @@ function Home() {
   }, [uploadPost])
 
   return (
-    <div className="w-full min-h-[100vh] bg-[#f0efe7] pt-[100px] gap-[20px] flex justify-center items-center lg:items-start px-[50px] lg:flex-row flex-col relative pb-[50px]">
+    <div className="w-full min-h-[100vh] bg-[#f0efe7] pt-[90px] md:pt-[100px] gap-[20px] flex justify-center items-center lg:items-start px-[10px] md:px-[50px] lg:flex-row flex-col relative pb-[50px]">
 
         {edit && <EditProfile/>}
         <Nav/>
@@ -95,13 +95,13 @@ function Home() {
           </div>
 
           {/* User Info */}
-          <div className="mt-[50px] ml-[15px]">
+          <div className="mt-[40px] md:mt-[50px] ml-[15px]">
             <div className="font-medium text-gray-700 text-[22px]">{`${userData.firstName} ${userData.lastName}`}</div>
             <div className="text-[16px] text-gray-700">{userData.headline}</div>
             <div className="text-gray-500 text-[16px]">{userData.location}</div>
           </div>
           
-          <button className='w-[100%] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500 my-[20px] flex items-center justify-center gap-[10px]' onClick={() => setEdit(true)}>Edit Profile <HiPencil/></button>
+          <button className='w-[100%] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500 my-[10px] md:my-[20px] flex items-center justify-center gap-[10px]' onClick={() => setEdit(true)}>Edit Profile <HiPencil/></button>
 
         </div>
 
@@ -112,7 +112,7 @@ function Home() {
         { uploadPost && <div className=" z-[200] bg-white shadow-lg rounded-lg fixed w-[90%] max-w-[500px] h-[500px] top-[60px] p-[20px] flex items-start justify-start flex-col gap-[20px]">
           <div
           className="absolute top-[15px] right-[15px] cursor-pointer"
-          onClick={() => setUploadPost(false)}
+          onClick={() => {setUploadPost(false); setFrontendImage("");}}
           >
             <RxCross1 className="h-[20px] w-[20px] text-gray-800 font-bold" />
           </div>
@@ -148,7 +148,7 @@ function Home() {
           <div className='h-[120px] w-full rounded-lg shadow-lg bg-white py-[10px]'>
             
             {/* Create a post searchbar*/}
-            <div className='flex justify-center items-center gap-[10px]'>             
+            <div className='flex justify-center items-center gap-[10px] px-[5px]'>             
               {/* Profile Picture */}
               <div className='text-gray-600 cursor-pointer w-[50px] h-[50px] items-center justify-center rounded-full border-2 border-white' onClick={() => setEdit(true)}>
                   <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-full h-full rounded-full overflow-hidden'/>              
@@ -156,7 +156,7 @@ function Home() {
               {/* Start a post button */}
               <button className='w-[80%] h-[48px] rounded-full bg-white border-2 border-gray-400 flex items-center justify-start hover:bg-gray-300' onClick={()=>setUploadPost(true)}><p className='ml-[15px] font-semibold text-[16px] text-gray-700'>Start a post</p></button>
             </div>
-            <div className="flex justify-center items-center gap-[20%] px-[10px] py-[15px]">
+            <div className="flex justify-around items-center py-[15px] px-[5px]">
 
               <div className="flex justify-center items-center cursor-pointer gap-[10px]">
                 <MdSmartDisplay className="text-[#388d31] h-[27px] w-[27px]"/> 
@@ -183,7 +183,7 @@ function Home() {
         </div>
 
         {/* Suggested Users Section */}
-        <div className='min-h-[200px] w-full lg:w-[25%] bg-white shadow-lg hidden lg:flex flex-col gap-[20px] p-[10px]'>
+        <div className='min-h-[200px] w-full lg:w-[25%] bg-white shadow-lg hidden lg:flex flex-col gap-[20px] p-[10px] rounded-lg'>
           {suggestedUsers.length>0 && <div className='flex flex-col gap-[10px]'>
             <p className="text-gray-500 font-semibold">Suggested Users</p>
             {suggestedUsers.map((user, index)=>(

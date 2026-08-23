@@ -16,6 +16,7 @@ function Nav() {
     let [showPopup, setShowPopup] = useState(false)
     let [searchInput, setSearchInput] = useState("")
     let [searchData, setSearchData] = useState([])
+    let [notificationData, setNotificationData] = useState([])
 
     let {userData, setUserData, handleGetProfile} = useContext(userDataContext)
     let {serverUrl} = useContext(authDataContext)
@@ -47,12 +48,25 @@ function Nav() {
         }
     }
 
+    const handleGetNotification = async () => {
+        try {
+            let result = await axios.get(`${serverUrl}/api/notification/get`, {withCredentials: true})
+            setNotificationData(result.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(()=>{
-            handleSearch()        
+        handleSearch()        
     }, [searchInput])
 
+    useEffect(()=>{
+        handleGetNotification();
+    }, []);
+
   return (
-    <div className="w-full h-[80px] bg-white fixed top-0 shadow-lg flex sm:justify-between justify-between items-center md:px-[10px] z-[80]">
+    <div className="w-full h-[80px] bg-white fixed top-0 shadow-lg flex sm:justify-between justify-between items-center  md:px-[10px] px-[5px] z-[80]">
         <div className="flex justify-center items-center gap-[10px] ml-[10px] md:ml-[40px] z-[80]">
             <div onClick={() => {setActiveSearch(false); navigate('/')}} className='cursor-pointer'>
                 <img src={logo2} alt="Logo" className='w-[50px]'/>
@@ -82,10 +96,10 @@ function Nav() {
                 <input type="text" placeholder='Search' value={searchInput} className='bg-transparent outline-none w-[80%] border-0' onChange={(e)=>setSearchInput(e.target.value)}/>
             </form>
         </div>
-        <div className="flex justify-center items-center gap-[20px] mr-[10px] md:mr-[40px]">
+        <div className="flex justify-center items-center relative gap-[20px] mr-[10px] md:mr-[40px]">
 
             {showPopup &&
-                <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute md:right-[80px] right-[25px] top-[85px] rounded-lg flex flex-col items-center gap-[20px] p-[20px]'>
+                <div className='w-[300px] min-h-[300px] bg-white shadow-lg absolute md:right-[0px] right-[0px] top-[70px] md:top-[85px] rounded-lg flex flex-col items-center gap-[20px] p-[20px]'>
 
                 <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer'>
                     <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-[60px] h-[60px] rounded-full overflow-hidden' onClick={()=>handleGetProfile(userData.userName)}/>
@@ -93,7 +107,7 @@ function Nav() {
                 <div className="font-semibold text-gray-700 text-[19px] cursor-pointer" onClick={()=>handleGetProfile(userData.userName)}>
                     {`${userData.firstName} ${userData.lastName}`}
                 </div>
-                <button className='w-[100%] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500' onClick={()=>navigate('/profile')}>View Profile</button>
+                <button className='w-[100%] h-[40px] bg-white hover:text-white text-blue-800 py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500' onClick={()=>handleGetProfile(userData.userName)}>View Profile</button>
                 <div className="h-[2px] w-full bg-gray-300"></div>
                 <div className='flex justify-start items-center text-gray-600 cursor-pointer w-full gap-[15px]' onClick={()=> navigate('/network')}>
                     <FaUserGroup className='w-[24px] h-[24px] text-gray-600'/>
@@ -117,6 +131,9 @@ function Nav() {
                 <IoNotificationsSharp className='w-[24px] h-[24px] text-gray-600'/>
                 <div className='md:block hidden'>Notifications</div>
             </div>
+
+            {notificationData.length>0 && <div className='cursor-pointer absolute flex justify-center items-center h-[17px] w-[17px] text-white bg-red-500 rounded-full p-[10px] text-[11px] bottom-[24px] right-[50px] md:bottom-[35px] md:right-[80px]'>{`${notificationData.length>9? '+9' : notificationData.length }`}</div>}
+
             <div className='flex flex-col justify-center items-center text-gray-600 cursor-pointer' onClick={() => setShowPopup(prev=> !prev)}>
                 <img src={userData.profileImage || BlankProfile} alt="Profile" className='w-[40px] h-[40px] rounded-full overflow-hidden'/>
             </div>

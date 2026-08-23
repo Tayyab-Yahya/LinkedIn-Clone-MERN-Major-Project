@@ -74,7 +74,7 @@ function ConnectionButton({ userId }) {
     }
 
   return (
-    <button className={`${status === "pending" ? "bg-gray-500 cursor-not-allowed border-gray-500" : "bg-blue-500 hover:bg-blue-600"} min-w-[100px] h-[40px] text-white py-[5px] px-[10px] rounded-full border-2 border-blue-500`} onClick={handleClick} disabled={status == "pending"}>
+    <button className={`${status === "pending" ? "bg-gray-500 cursor-not-allowed border-gray-500" : "bg-blue-500 hover:bg-blue-600"} md:min-w-[100px] h-[40px] text-white py-[5px] px-[10px] rounded-full border-2 border-blue-500`} onClick={handleClick} disabled={status == "pending"}>
       {status}
     </button>
   )

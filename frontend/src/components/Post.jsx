@@ -6,6 +6,7 @@ import { userDataContext } from '../context/UserContext'
 import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { socket } from '../context/UserContext'
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 import { AiOutlineLike } from "react-icons/ai"; //NoFill
 import { AiFillLike } from "react-icons/ai"; //Fill
@@ -97,11 +98,11 @@ function Post({id, author, like, comment, description, image, createdAt}) {
       <div className='flex justify-between items-center'>
         {/* Profile Div */}
         <div className='flex justify-center items-start gap-[10px]' onClick={()=>handleGetProfile(author.userName)}>
-            <div className='cursor-pointer w-[50px] h-[50px] items-center justify-center rounded-full border-2 border-white'>
-                <img src={author.profileImage || BlankProfile} alt="Profile" className='w-full h-full rounded-full overflow-hidden'/>              
+            <div className='cursor-pointer max-w-[60px] min-w-[50px] h-[50px] items-center justify-center rounded-full border-2 border-white'>
+                <img src={author.profileImage || BlankProfile} alt="Profile" className='w-[45px] h-full rounded-full overflow-hidden'/>              
             </div>
             <div>
-                <div className="font-semibold text-gray-800 text-[20px]">{`${author.firstName} ${author.lastName}`}</div>
+                <div className="font-semibold text-gray-800 text-[20px] cursor-pointer" onClick={()=>handleGetProfile(author.userName)}>{`${author.firstName} ${author.lastName}`}</div>
                 <div className="font-medium text-gray-700 text-[15px]">{author.headline}</div>
                 <div className="font-normal text-gray-700 text-[13px]">{moment(createdAt).fromNow()}</div>
             </div>
@@ -110,11 +111,14 @@ function Post({id, author, like, comment, description, image, createdAt}) {
         {/* Button Div */}
         <div>
             {userData._id != author._id && <ConnectionButton userId={author._id} />}
-            {userData._id == author._id && 
-                <button className={`bg-red-600 hover:bg-red-700 min-w-[100px] h-[40px] text-white py-[5px] px-[10px] rounded-full border-2 border-red-700`} onClick={()=>handleDeletePost(id)}>
+            {userData._id == author._id && <div>
+                <button className={`bg-red-600 md:flex hidden hover:bg-red-700 min-w-[100px] h-[40px] text-white py-[5px] px-[10px] rounded-full border-2 border-red-700`} onClick={()=>handleDeletePost(id)}>
                     delete post
                 </button>
-            }
+                <button className={`bg-red-600 md:hidden flex items-center justify-center hover:bg-red-700 w-[50px] h-[40px] text-white rounded-lg border-2 border-red-700`} onClick={()=>handleDeletePost(id)}>
+                    <RiDeleteBin6Fill className='w-[20px] h-[20px]'/>
+                </button>
+            </div>}
         </div>
       </div>
 
@@ -129,7 +133,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
         </div>}
 
         <div>
-            <div className='w-full flex justify-between items-center p-[20px] border-b-2 border-gray-400'>
+            <div className='w-full flex justify-between items-center p-[10px] md:p-[20px] border-b-2 border-gray-400'>
                 <div className='flex items-center justify-center gap-[5px] text-[18px]'>
                     <BiLike className='text-blue-500 w-[20px] h-[20px]'/>
                     <span>{likes.length}</span>
@@ -139,7 +143,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
                     <span>Comments</span>
                 </div>
             </div>
-            <div className='flex justify-start items-center gap-[20px] p-[20px] w-full'>
+            <div className='flex justify-start items-center gap-[20px] p-[15px] md:p-[20px] w-full'>
                 <div className='flex justify-center items-center gap-[5px] cursor-pointer' onClick={handleLike}>
 
                     {!likes.includes(userData._id)?
@@ -161,7 +165,7 @@ function Post({id, author, like, comment, description, image, createdAt}) {
             </div>
             {showComment && <div>
                 <form className='w-full flex justify-between items-center border-b-2 border-b-gray-300 p-[10px]'  onSubmit={handleComment}>
-                    <input type="text" placeholder='Leave a comment' className='outline-none border-none' onChange={(e)=>setCommentContent(e.target.value)} value={commentContent}/>
+                    <input type="text" placeholder='Add a comment...' className='outline-none border-none' onChange={(e)=>setCommentContent(e.target.value)} value={commentContent}/>
                     <button><LuSendHorizontal className='w-[22px] h-[22px] text-blue-500'/></button>
                 </form>
                 <div className='flex flex-col gap-[10px]'>

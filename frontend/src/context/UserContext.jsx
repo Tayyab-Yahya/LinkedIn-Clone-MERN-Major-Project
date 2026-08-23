@@ -13,7 +13,7 @@ function UserContext({children}) {
     let {serverUrl} = useContext(authDataContext);
     let [edit, setEdit] = useState(false);
     let [postData, setPostData] = useState([]);
-    let [profileData, setProfileData] = useState([]);
+    let [profileData, setProfileData] = useState(null);
 
     const navigate = useNavigate();
 
@@ -21,6 +21,7 @@ function UserContext({children}) {
         try {
             let result = await axios.get(serverUrl+'/api/user/currentuser', {withCredentials: true});
             setUserData(result.data);
+
             // console.log(result.data);
         } catch (error) {
             console.log(error);
@@ -41,7 +42,7 @@ function UserContext({children}) {
     const handleGetProfile = async (userName) => {
         try {
             let result = await axios.get(serverUrl+`/api/user/profile/${userName}`, {withCredentials: true});
-            setProfileData(result.data)            
+            setProfileData(result.data)
 
             navigate(`/profile`);
         } catch (error) {
@@ -54,7 +55,7 @@ function UserContext({children}) {
         getPost();
     }, []);
 
-    const value = {userData, setUserData, edit, setEdit, postData, setPostData, getPost, profileData, setProfileData, handleGetProfile};
+    const value = {userData, setUserData, edit, setEdit, postData, setPostData, getPost, profileData, setProfileData, handleGetProfile, getCurrentUser};
 
   return (
     <div>

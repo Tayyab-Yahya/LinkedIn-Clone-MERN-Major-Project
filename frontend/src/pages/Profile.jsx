@@ -29,7 +29,7 @@ function Profile() {
             <div className='relative pb-[40px] bg-white rounded-lg shadow-lg'>
                 {/* Cover Photo */}
                 <div className='w-full h-[150px] bg-gray-400 rounded overflow-hidden flex justify-center items-center cursor-pointer' onClick={() => setEdit(true)}>
-                <img src={profileData.coverImage || ""} alt="" className='w-full'/>
+                <img src={profileData.coverImage || "/"} alt="" className='w-full'/>
                 <FiCamera className='absolute top-[20px] right-[20px] text-white'/>
                 </div>
                 
@@ -45,10 +45,10 @@ function Profile() {
 
                 {/* User Info */}
                 <div className="mt-[60px] ml-[15px]">
-                <div className="font-bold text-gray-700 text-[24px]">{`${profileData.firstName} ${profileData.lastName}`}</div>
-                <div className="text-[16px] font-semibold text-gray-700">{profileData.headline}</div>
-                <div className="text-gray-500 text-[16px]">{profileData.location}</div>
-                <div className="text-blue-500 text-[16px] mt-[10px] font-semibold">{profileData.connection.length} connections</div>
+                    <div className="font-bold text-gray-700 text-[24px]">{`${profileData.firstName} ${profileData.lastName}`}</div>
+                    <div className="text-[16px] font-semibold text-gray-700">{profileData.headline}</div>
+                    <div className="text-gray-500 text-[16px]">{profileData.location}</div>
+                    <div className="text-blue-500 text-[16px] mt-[10px] font-semibold">{profileData?.connection?.length} connections</div>
                 </div>
                 
                 {profileData._id == userData._id && 
@@ -65,47 +65,49 @@ function Profile() {
                 <Post key={index} id={post._id} description={post.description} author={post.author} image={post.image} like={post.like} comment={post.comment} createdAt={post.createdAt}/>
             ))}
 
-            {profileData.skills.length>0 && <div  className='w-full min-h-[100px] flex flex-col gap-[10px] jusify-center p-[20px] bg-white shadow-lg rounded-lg'>
+            {profileData?.skills?.length>0 && <div  className='w-full min-h-[100px] flex flex-col gap-[10px] jusify-center p-[20px] bg-white shadow-lg rounded-lg'>
                 <div className='text-[22px] text-gray-600 font-semibold'>
                     {`Skills (${profileData.skills.length})`}
                 </div>
                 <div className='flex flex-wrap justify-start items-center gap-[10px] text-[17px] text-gray-600 font-semibold p-[20px]'>
-                    {profileData.skills.map((skill)=>(
-                        <div>{skill}</div>
+                    {profileData.skills.map((skill, index)=>(
+                        <div key={index}>{skill}</div>
                     ))}
-                    {profileData._id == userData._id && 
-                    <button className="w-[12%] h-[37px] bg-blue-500 text-white py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500" onClick={()=>setEdit(true)}>Add skill</button>}
+                    <div>
+                        {profileData._id == userData._id && 
+                        <button className="min-w-[12%] h-[37px] bg-blue-500 text-white py-[5px] px-[10px] rounded-full hover:bg-blue-600 border-2 border-blue-500" onClick={()=>setEdit(true)}>Add skill</button>}
+                    </div>
                 </div>
             </div>}
 
-            {profileData.education.length>0 && <div  className='w-full min-h-[100px] flex flex-col gap-[10px] jusify-center p-[20px] bg-white shadow-lg rounded-lg'>
+            {profileData?.education?.length>0 && <div  className='w-full min-h-[100px] flex flex-col gap-[10px] jusify-center p-[20px] bg-white shadow-lg rounded-lg'>
                 <div className='text-[22px] text-gray-600 font-semibold'>
                     Education
                 </div>
                 <div className='flex flex-col justify-start items-start gap-[10px] text-[17px] text-gray-600 font-semibold p-[20px]'>
-                    {profileData.education.map((edu)=>(
-                        <>
+                    {profileData.education.map((edu, index)=>(
+                        <div key={index} className='flex flex-col gap-[5px]'>
                             <div>College: <span className='font-normal'>{edu.college}</span></div>
                             <div>Degree: <span className='font-normal'>{edu.degree}</span></div>
                             <div>Field of Study: <span className='font-normal'>{edu.fieldOfStudy}</span></div>
-                        </>
+                        </div>
                     ))}
                     {profileData._id == userData._id && 
                     <button className="min-w-[12%] h-[37px] bg-blue-500 text-white py-[5px] px-[12px] rounded-full hover:bg-blue-600 border-2 border-blue-500" onClick={()=>setEdit(true)}>Add education</button>}
                 </div>
             </div>}
 
-            {profileData.experience.length>0 && <div  className='w-full min-h-[100px] flex flex-col gap-[10px] jusify-center p-[20px] bg-white shadow-lg rounded-lg'>
+            {profileData?.experience?.length>0 && <div  className='w-full min-h-[100px] flex flex-col gap-[10px] jusify-center p-[20px] bg-white shadow-lg rounded-lg'>
                 <div className='text-[22px] text-gray-600 font-semibold'>
                     Experience
                 </div>
                 <div className='flex flex-col justify-start items-start gap-[10px] text-[17px] text-gray-600 font-semibold p-[20px]'>
-                    {profileData.experience.map((exp)=>(
-                        <>
+                    {profileData.experience.map((exp, index)=>(
+                        <div key={index} className='flex flex-col gap-[5px]'>
                             <div>Title: <span className='font-normal'>{exp.title}</span></div>
                             <div>Company: <span className='font-normal'>{exp.company}</span></div>
                             <div>Description: <span className='font-normal'>{exp.description}</span></div>
-                        </>
+                        </div>
                     ))}
                     {profileData._id == userData._id && 
                     <button className="min-w-[12%] h-[37px] bg-blue-500 text-white py-[5px] px-[12px] rounded-full hover:bg-blue-600 border-2 border-blue-500" onClick={()=>setEdit(true)}>Add experience</button>}

@@ -72,16 +72,16 @@ function Notification() {
         {notificationData.length>0 && <div className='w-[100%] shadow-lg rounded-lg h-[100vh] overflow-auto flex justify-start flex-col gap-[0px] bg-white max-w-[700px] items-center mt-[10px]'>
             {notificationData.map((notification, index) => (
 
-            <div className='flex p-[20px] justify-between w-full hover:bg-slate-200 cursor-pointer border-b-2 border-b-gray-300' onClick={()=>handleGetProfile(notification.relatedUser.userName)}>
+            <div className='flex gap-[5px] md:gap-0 p-[10px] md:p-[20px] justify-between w-full hover:bg-slate-200  border-b-2 border-b-gray-300'>
                 {/* Profile Section */}
-                <div className='w-[60px] h-[60px] rounded-full overflow-hidden'>                
+                <div className='h-[40px] w-[40px] md:w-[60px] md:h-[60px] rounded-full overflow-hidden cursor-pointer' onClick={()=>handleGetProfile(notification.relatedUser.userName)}>
                     <img src={notification.relatedUser.profileImage || BlankProfile} alt="" className='w-full h-full overflow-hidden rounded-full'/>
                 </div>
                 {/* Central Data Section */}
-                <div className='flex flex-col w-[30rem] gap-[10px] justify-center'>
+                <div className='flex flex-col w-[15rem] md:w-[30rem] gap-[10px] justify-center'>
                     {/* Upper div for username and message */}
-                    <div className='text-[18px]'>
-                        <span className='font-semibold'>{`${notification.relatedUser.firstName} ${notification.relatedUser.lastName}`}</span> {handleMessage(notification.type)}
+                    <div className='text-[15px] md:text-[18px]'>
+                        <span className='font-semibold cursor-pointer' onClick={()=>handleGetProfile(notification.relatedUser.userName)}>{`${notification.relatedUser.firstName} ${notification.relatedUser.lastName}`}</span> {handleMessage(notification.type)}
                     </div>
                     {/* Lower div for related post and description */}
                     {notification.relatedPost && <div className={`border-gray-400 border-2 flex rounded-lg overflow-hidden items-center ${notification.relatedPost.image? '':'p-[10px]'}`}>
