@@ -119,7 +119,7 @@ function Nav() {
 
             </div> }
 
-            <div className='lg:flex flex-col justify-center items-center text-gray-600 cursor-pointer hidden'>
+            <div className='lg:flex flex-col justify-center items-center text-gray-600 cursor-pointer hidden' onClick={()=>navigate('/')}>
                 <TiHome className='w-[24px] h-[24px] text-gray-600'/>
                 <div>Home</div>
             </div>
