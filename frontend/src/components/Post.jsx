@@ -97,8 +97,8 @@ function Post({id, author, like, comment, description, image, createdAt}) {
       {/* Upper div */}
       <div className='flex justify-between items-center'>
         {/* Profile Div */}
-        <div className='flex justify-center items-start gap-[10px]' onClick={()=>handleGetProfile(author.userName)}>
-            <div className='cursor-pointer max-w-[60px] min-w-[50px] h-[50px] items-center justify-center rounded-full border-2 border-white'>
+        <div className='flex justify-center items-start gap-[10px]'>
+            <div className='cursor-pointer max-w-[60px] min-w-[50px] h-[50px] items-center justify-center rounded-full border-2 border-white' onClick={()=>handleGetProfile(author.userName)}>
                 <img src={author.profileImage || BlankProfile} alt="Profile" className='w-[45px] h-full rounded-full overflow-hidden'/>              
             </div>
             <div>

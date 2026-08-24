@@ -82,13 +82,14 @@ export const comment = async (req, res) => {
         }, {new: true})
         .populate("comment.user", "firstName lastName profileImage headline")
 
-        
+        if(post.author._id != userId){
             let notification = await Notification.create({
                 receiver: post.author,
                 type: "comment",
                 relatedUser: userId,
                 relatedPost: postId,
             });
+        }
 
         io.emit("commentAdded", {postId, comm: post.comment})
 

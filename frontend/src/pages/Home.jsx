@@ -189,14 +189,14 @@ function Home() {
             {suggestedUsers.map((user, index)=>(
               <div className='flex flex-col gap-[10px] p-[5px]' key={index}>
                 <div className='flex items-center gap-[10px] p-[10px] hover:bg-gray-200 cursor-pointer overflow-hidden rounded-lg' key={user._id} onClick={()=>handleGetProfile(user.userName)}>
-                  <div className='flex flex-col justify-center items-center text-gray-600'>
+                  <div className='flex min-w-[40px] flex-col justify-center items-center text-gray-600'>
                       <img src={user.profileImage || BlankProfile} alt="Profile" className='w-[40px] h-[40px] rounded-full overflow-hidden'/>
                   </div>
                   <div>
                       <div className="font-semibold text-gray-700 text-[17px]">
                           {`${user.firstName} ${user.lastName}`}
                       </div>
-                      <div className='text-[14px] text-gray-500 font-semibold'>{user.headline}</div>
+                      <div className='text-[14px] text-gray-500 font-semibold max-h-[40px] overflow-hidden'>{user.headline}</div>
                   </div>
                 </div>
 

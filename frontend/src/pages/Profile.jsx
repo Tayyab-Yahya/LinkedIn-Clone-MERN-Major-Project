@@ -71,7 +71,7 @@ function Profile() {
                 </div>
                 <div className='flex flex-wrap justify-start items-center gap-[10px] text-[17px] text-gray-600 font-semibold p-[20px]'>
                     {profileData.skills.map((skill, index)=>(
-                        <div key={index}>{skill}</div>
+                        <div className='text-white font-semibold bg-gray-500 rounded-full px-[20px] py-[5px]' key={index}>{skill}</div>
                     ))}
                     <div>
                         {profileData._id == userData._id && 
